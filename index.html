@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Micro Adventure</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <div id="landing-screen">
+    <h1>🌍 Welcome to Micro Adventure</h1>
+    <p>Find hidden treasures around your area. Use your senses and your phone!</p>
+    <button id="enter-game">Enter Adventure</button>
+  </div>
+
+  <div id="game-container">
+    <h1>Micro Adventure</h1>
+
+    <div id="camera-container">
+      <video id="camera" autoplay></video>
+      <button id="start-camera">Start Camera</button>
+    </div>
+
+    <div id="location-container">
+      <button id="get-location">Get Current Location</button>
+      <p id="location-info"></p>
+    </div>
+
+    <div id="game-ui">
+      <h2>Objective: Find Hidden Treasures!</h2>
+      <p id="game-status">Status: Ready for Adventure!</p>
+      <button id="start-adventure">Start Adventure</button>
+      <div id="progress">Treasures Found: <span id="found-count">0</span> / <span id="total-count">0</span></div>
+    </div>
+
+    <div id="map" style="height: 300px; margin-top: 20px;"></div>
+
+    <div id="clue-box" class="hidden">
+      <p id="clue-text"></p>
+    </div>
+
+    <div id="result-container">
+      <p id="result"></p>
+      <p id="treasure-message" class="hidden"></p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
