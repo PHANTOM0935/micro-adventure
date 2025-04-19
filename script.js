@@ -1,132 +1,100 @@
-// script.js
-
-const startCameraButton = document.getElementById("start-camera");
-const cameraElement = document.getElementById("camera");
-const getLocationButton = document.getElementById("get-location");
+// DOM Elements
+const logoScreen = document.getElementById("logo-screen");
+const themeSelector = document.getElementById("theme-selector");
+const gameContainer = document.getElementById("game-container");
+const enterBtn = document.getElementById("enter-game");
+const themeButtons = document.querySelectorAll("#theme-selector button");
+const startCameraBtn = document.getElementById("start-camera");
+const camera = document.getElementById("camera");
+const getLocationBtn = document.getElementById("get-location");
 const locationInfo = document.getElementById("location-info");
-const startAdventureButton = document.getElementById("start-adventure");
+const startAdventureBtn = document.getElementById("start-adventure");
 const gameStatus = document.getElementById("game-status");
-const resultText = document.getElementById("result");
-const treasureMessage = document.getElementById("treasure-message");
-const foundCountEl = document.getElementById("found-count");
-const totalCountEl = document.getElementById("total-count");
-const clueBox = document.getElementById("clue-box");
-const clueText = document.getElementById("clue-text");
-const landingScreen = document.getElementById("landing-screen");
-const enterGameBtn = document.getElementById("enter-game");
+const result = document.getElementById("result");
+const avatar = document.getElementById("avatar");
 
-let map, userMarker;
-let treasureFound = false;
-let foundTreasures = [];
-let treasureMarkers = [];
+let currentTheme = null;
+let map = null;
+let treasureSpots = [];
 
-const treasureLocations = [
-  { name: "Old Well", lat: 37.4219999, lng: -122.0840575 },
-  { name: "Mysterious Tree", lat: 37.4225, lng: -122.086 },
-  { name: "Lost Bench", lat: 37.423, lng: -122.082 }
-];
-
-totalCountEl.textContent = treasureLocations.length;
-
-enterGameBtn.addEventListener("click", () => {
-  landingScreen.style.display = "none";
-  document.getElementById("game-container").style.display = "block";
+// Transitions
+enterBtn.addEventListener("click", () => {
+  logoScreen.classList.add("hidden");
+  themeSelector.classList.remove("hidden");
 });
 
-startCameraButton.addEventListener("click", async () => {
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      cameraElement.srcObject = stream;
-      startCameraButton.style.display = "none";
-    } catch (error) {
-      alert("Could not access the camera.");
-    }
-  } else {
-    alert("Camera not supported on this device.");
-  }
-});
-
-getLocationButton.addEventListener("click", () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, () => alert("Unable to retrieve location."));
-  }
-});
-
-function showPosition(position) {
-  const lat = position.coords.latitude;
-  const lng = position.coords.longitude;
-  locationInfo.textContent = `Latitude: ${lat}, Longitude: ${lng}`;
-
-  if (!map) {
-    map = L.map("map").setView([lat, lng], 16);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-  }
-
-  if (userMarker) {
-    userMarker.setLatLng([lat, lng]);
-  } else {
-    userMarker = L.marker([lat, lng]).addTo(map);
-  }
-
-  treasureLocations.forEach((t, index) => {
-    const marker = L.marker([t.lat, t.lng]).addTo(map).bindPopup(t.name);
-    treasureMarkers[index] = marker;
+// Theme selection
+themeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentTheme = btn.dataset.theme;
+    applyTheme(currentTheme);
+    themeSelector.classList.add("hidden");
+    gameContainer.classList.remove("hidden");
   });
+});
 
-  if (!treasureFound) {
-    checkTreasureProximity(lat, lng);
+function applyTheme(theme) {
+  document.body.className = theme;
+  if (theme === "jungle") {
+    avatar.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/1998/1998611.png')";
+  } else if (theme === "pirate") {
+    avatar.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/1046/1046750.png')";
   }
 }
 
-startAdventureButton.addEventListener("click", () => {
-  gameStatus.textContent = "Adventure Started! Find the treasures!";
-  startAdventureButton.disabled = true;
+// Camera
+startCameraBtn.addEventListener("click", async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    camera.srcObject = stream;
+    startCameraBtn.style.display = "none";
+  } catch (err) {
+    alert("Camera access denied.");
+  }
+});
 
+// Location
+getLocationBtn.addEventListener("click", () => {
   if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(pos => {
-      showPosition(pos);
+    navigator.geolocation.getCurrentPosition(showLocation, () => {
+      alert("Unable to fetch location.");
     });
+  } else {
+    alert("Geolocation not supported.");
   }
 });
 
-function checkTreasureProximity(lat, lng) {
-  treasureLocations.forEach((t, index) => {
-    const dist = getDistance(lat, lng, t.lat, t.lng);
-    if (dist < 10 && !foundTreasures.includes(index)) {
-      treasureFound = true;
-      foundTreasures.push(index);
+function showLocation(position) {
+  const { latitude, longitude } = position.coords;
+  locationInfo.textContent = `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
+  if (!map) initMap(latitude, longitude);
+}
 
-      treasureMessage.textContent = `🎉 You found ${t.name}! 🎉`;
-      treasureMessage.classList.remove("hidden");
-      clueText.textContent = `Clue: The ${t.name} hides secrets no one knows.`;
-      clueBox.classList.remove("hidden");
+// Map & Treasures
+function initMap(lat, lon) {
+  map = L.map('map').setView([lat, lon], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-      foundCountEl.textContent = foundTreasures.length;
-      treasureMarkers[index].remove();
+  // Sample treasure locations nearby
+  treasureSpots = [
+    [lat + 0.0008, lon + 0.0004],
+    [lat - 0.0006, lon - 0.0003],
+    [lat + 0.0003, lon - 0.0007],
+  ];
 
-      setTimeout(() => {
-        treasureFound = false;
-        treasureMessage.classList.add("hidden");
-        clueBox.classList.add("hidden");
-      }, 5000);
-    }
+  treasureSpots.forEach(coords => {
+    const marker = L.marker(coords).addTo(map);
+    marker.bindPopup("Suspicious spot... 🤔").openPopup();
   });
+
+  L.marker([lat, lon]).addTo(map).bindPopup("You are here").openPopup();
 }
 
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-    Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c * 1000;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
-}
+// Game Start
+startAdventureBtn.addEventListener("click", () => {
+  gameStatus.textContent = "Searching for clues...";
+  setTimeout(() => {
+    gameStatus.textContent = "Treasure found!";
+    result.textContent = `Congratulations! You've completed the ${currentTheme} adventure!`;
+  }, 3000);
+});
