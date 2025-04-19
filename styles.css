@@ -1,105 +1,97 @@
-/* styles.css */
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-#landing-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #007bff;
-  color: white;
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #111;
+  color: #fff;
+  text-align: center;
+  transition: background 1s ease-in-out;
+}
+
+/* Logo screen */
+#logo-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10;
-  text-align: center;
-  padding: 20px;
+  height: 100vh;
+  animation: fadeIn 1.5s ease;
 }
 
-#landing-screen h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+.animated-logo {
+  font-size: 3rem;
+  animation: pulse 2s infinite;
 }
 
-#landing-screen button {
-  padding: 10px 25px;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 10px;
-  background-color: #ffc107;
-  color: #333;
-  cursor: pointer;
-}
-
-#landing-screen button:hover {
-  background-color: #e0a800;
-}
-
-#game-container {
-  display: none;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px;
-}
-
-#camera-container, #location-container, #game-ui, #result-container {
-  margin: 20px 0;
-}
-
-#camera-container video {
-  width: 100%;
-  height: auto;
-  border: 3px solid #007bff;
-}
-
-button {
+#enter-game {
   padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  margin-top: 20px;
+  font-size: 1.2rem;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #218838;
+/* Theme Selector */
+#theme-selector {
+  padding: 50px;
 }
 
-#location-info, #game-status {
-  font-size: 1rem;
-  margin-top: 10px;
-}
-
-#game-status {
-  font-size: 1.5rem;
-}
-
-#result-container p {
+#theme-selector button {
+  padding: 15px 30px;
+  margin: 10px;
   font-size: 1.2rem;
-  color: #ff6347;
+  cursor: pointer;
+  border-radius: 10px;
 }
 
-#progress {
-  font-size: 1.2rem;
-  color: #007bff;
-  margin-top: 15px;
+/* Game Container */
+#game-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
 }
 
-#clue-box {
-  margin-top: 20px;
+#camera {
+  width: 100%;
+  border: 3px solid #28a745;
+}
+
+#map {
+  width: 100%;
+  height: 300px;
+  margin: 20px 0;
 }
 
 .hidden {
   display: none;
+}
+
+#avatar {
+  height: 100px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Theming */
+body.jungle {
+  background-image: linear-gradient(#1b5e20, #33691e);
+}
+
+body.pirate {
+  background-image: linear-gradient(#002f4b, #005f6b);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
