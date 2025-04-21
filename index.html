@@ -3,55 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Micro Adventure</title>
+  <title>Micro Adventure GO - AR Mode</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-  <!-- Animated Logo -->
-  <div id="logo-screen">
-    <h1 class="animated-logo">🌍 Micro Adventure 🌴</h1>
-    <button id="enter-game">Enter</button>
+  <div id="camera-screen">
+    <video id="camera-view" autoplay playsinline></video>
+    <div id="treasure-overlay">
+      <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" class="treasure" id="treasure-1" />
+      <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" class="treasure" id="treasure-2" />
+    </div>
+    <button id="start-btn">Start Adventure</button>
+    <div id="status">🔎 Scan your surroundings to find treasures!</div>
   </div>
-
-  <!-- Theme Selector -->
-  <div id="theme-selector" class="hidden">
-    <h2>Choose Your Adventure</h2>
-    <button data-theme="jungle">🌴 Jungle Quest</button>
-    <button data-theme="pirate">🏴‍☠️ Pirate Hunt</button>
-  </div>
-
-  <!-- Game Container -->
-  <div id="game-container" class="hidden">
-    <header>
-      <h2 id="game-title">Micro Adventure</h2>
-      <div id="avatar"></div>
-    </header>
-
-    <div id="camera-container">
-      <video id="camera" autoplay></video>
-      <button id="start-camera">Start Camera</button>
-    </div>
-
-    <div id="location-container">
-      <button id="get-location">Get Current Location</button>
-      <p id="location-info"></p>
-    </div>
-
-    <div id="map-container">
-      <div id="map"></div>
-    </div>
-
-    <div id="game-ui">
-      <p id="game-status">Ready to begin your quest!</p>
-      <button id="start-adventure">Start Adventure</button>
-    </div>
-
-    <div id="result-container">
-      <p id="result"></p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <script src="micr adventure.js"></script>
 </body>
 </html>
