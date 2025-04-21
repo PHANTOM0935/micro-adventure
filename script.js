@@ -66,7 +66,7 @@ getLocationBtn.addEventListener("click", () => {
 
 function showLocation(position) {
   const { latitude, longitude } = position.coords;
-  locationInfo.textContent = `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
+  locationInfo.textContent = Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)};
   if (!map) initMap(latitude, longitude);
 }
 
@@ -95,6 +95,6 @@ startAdventureBtn.addEventListener("click", () => {
   gameStatus.textContent = "Searching for clues...";
   setTimeout(() => {
     gameStatus.textContent = "Treasure found!";
-    result.textContent = `Congratulations! You've completed the ${currentTheme} adventure!`;
-  }, 3000);
+    result.textContent = Congratulations! You've completed the ${currentTheme} adventure!;
+  }, 3000);
 });
